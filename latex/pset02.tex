@@ -6,6 +6,8 @@
 \usepackage{hyperref}
 \usepackage{pgffor}
 
+\newtheorem*{theorem*}{Theorem}
+
 \title{MIT 6.1200J Problem Set 2 – Solutions}
 \author{Nouman Rahman}
 \date{1st September 2026}
@@ -14,13 +16,17 @@
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\Z}{\mathbb{Z}}
 \newcommand{\TODO}[1]{\emph{[TODO: #1]}}
+\newcommand{\partlabel}[1]{%
+    \noindent\makebox[2em][l]{\textbf{(#1)}}%
+}
 
 \begin{document}
 \maketitle
 
 \section*{Problem 1: Outlining Proofs}
 
-\textbf{(a)} Theorem: ``Every natural number is tall or wide, but not both.'' (Proof method: proof by cases.)
+\partlabel{a}
+Theorem: ``Every natural number is tall or wide, but not both.'' (Proof method: proof by cases.)
 
 Writing $T(n)$ for ``$n$ is tall'' and $W(n)$ for ``$n$ is wide,'' the theorem says
 \[
@@ -39,7 +45,9 @@ In both cases $T(n) \oplus W(n)$ holds, completing the proof by cases.
 \end{quote}
 
 \bigskip
-\textbf{(b)} Theorem: ``There exists a happy natural number between $10$ and $1000$ that has no happy proper divisors.'' (Proof method: choose $25$ as the example.)
+
+\partlabel{b}
+Theorem: ``There exists a happy natural number between $10$ and $1000$ that has no happy proper divisors.'' (Proof method: choose $25$ as the example.)
 
 Writing $H(n)$ for ``$n$ is happy'' and $D(n)$ for the set of proper divisors of $n$, the theorem says
 \[
@@ -59,7 +67,8 @@ Since $25$ is in range, happy, and has no happy proper divisor, $n = 25$ witness
 \end{quote}
 
 \bigskip
-\textbf{(c)} Theorem: ``There are no devious natural numbers.'' (Proof method: regular induction, with base cases $0$ and $1$.)
+\partlabel{c}
+Theorem: ``There are no devious natural numbers.'' (Proof method: regular induction, with base cases $0$ and $1$.)
 
 Writing $D(n)$ for ``$n$ is devious,'' the theorem says $\forall n \in \N.\ \neg D(n)$. Let
 \[
@@ -85,7 +94,8 @@ By induction (using both base cases as anchors), $P(n)$ holds for all $n \in \N$
 Recall $x_1 = 4$, $x_2 = 13$, and $x_i = 6x_{i-1} - 8x_{i-2}$ for $i \ge 3$, so $(x_1,x_2,x_3,x_4,\dots) = (4,13,46,172,\dots)$. Goal: $x_i > 0$ for all $i \ge 1$.
 
 \medskip
-\textbf{(a) Befuddled Brynmor's mistake.}
+\partlabel{a}
+Befuddled Brynmor's mistake.
 
 Brynmor uses strong induction on $Q(i) := $ ``$x_i \ge 2^i$'', and in the inductive step writes
 \[
@@ -96,21 +106,24 @@ substituting the lower bounds $x_i \ge 2^i$ and $x_{i-1} \ge 2^{i-1}$ directly i
 \emph{This step is invalid.} The term $6x_i$ has a positive coefficient, so substituting the lower bound $x_i \ge 2^i$ correctly gives $6x_i \ge 6\cdot 2^i$. But the term $-8x_{i-1}$ has a \emph{negative} coefficient: to lower-bound $-8x_{i-1}$ we need an \emph{upper} bound on $x_{i-1}$, not a lower bound. Knowing $x_{i-1} \ge 2^{i-1}$ only tells us $-8x_{i-1} \le -8\cdot 2^{i-1}$ — the inequality goes the wrong way to conclude anything about $x_{i+1}$ being large. So the displayed inequality $x_{i+1} \ge 6\cdot 2^i - 8\cdot 2^{i-1}$ does not actually follow from the inductive hypothesis, and the rest of the argument is unjustified.
 
 \medskip
-\textbf{(b) Erroneous Erik's mistake.}
+\partlabel{b}
+Erroneous Erik's mistake.
 
 Erik uses (regular) induction on $R(i) := $ ``$x_i \ge 3x_{i-1}$'' for $i \ge 2$. In the inductive step, after correctly deriving $x_{i+1} \ge \tfrac{10}{3}x_i$ from the inductive hypothesis $R(i)$, he writes: ``Since $x_i > 0$, $\tfrac{10}{3}x_i > 3x_i$'' in order to conclude $x_{i+1} \ge 3x_i$, i.e.\ $R(i+1)$.
 
 \emph{This step is circular.} The inductive step for $R(i+1)$ is only allowed to use the inductive hypothesis $R(i)$ (namely $x_i \ge 3x_{i-1}$) — it does \emph{not} give us $x_i > 0$ for free. Positivity of $x_i$ is exactly the fact the whole exercise is trying to establish, and it is only derived \emph{afterward}, by combining $R(i)$ with $x_1 > 0$. Using ``$x_i > 0$'' inside the proof of $R(i)\Rightarrow R(i+1)$, before positivity has been established, assumes the very conclusion the argument is building toward.
 
 \medskip
-\textbf{(c) Overzealous Zach's mistake.}
+\partlabel{c}
+Overzealous Zach's mistake.
 
 Zach uses strong induction on $S(i) := $ ``$x_i = 4^i$'', with a single base case $S(1)$, and an inductive step that (for general $i\ge 1$) invokes both $S(i-1)$ and $S(i)$ to derive $S(i+1)$ via the recurrence $x_{i+1} = 6x_i - 8x_{i-1}$.
 
-\emph{This step fails already at $i = 1$.} To derive $S(2)$ this way, the inductive step needs $S(0)$, i.e.\ a value $x_0 = 4^0 = 1$ — but $x_0$ is not defined at all ($x_1, x_2$ are the given base values, and the recurrence $x_i = 6x_{i-1}-8x_{i-2}$ is only stipulated for $i \ge 3$). So the inductive step's use of the recurrence to compute $x_2$ from $x_1, x_0$ is illegitimate on two counts: $x_0$ doesn't exist, and even $x_2$ itself is a \emph{given} base value, not something produced by the recurrence. Consistent with this, the claim $S(2)$ is simply false: $x_2 = 13 \ne 16 = 4^2$. So the strong induction breaks down exactly at the step from $i=1$ to $i=2$.
+\emph{This step fails already at $i = 1$.} To derive $S(2)$ this way, the inductive step needs $S(0)$, i.e.\ a value $x_0 = 4^0 = 1$ — but $x_0$ is not defined at all ($x_1, x_2$ are the given base values, and the recurrence $x_i = 6x_{i-1}-8x_{i-2}$ is only stipulated for $i \ge 3$). So the strong induction step's use of the recurrence to compute $x_2$ from $x_1, x_0$ is illegitimate on two counts: $x_0$ doesn't exist, and even $x_2$ itself is a \emph{given} base value, not something produced by the recurrence. Consistent with this, the claim $S(2)$ is simply false: $x_2 = 13 \ne 16 = 4^2$. So the strong induction breaks down exactly at the step from $i=1$ to $i=2$.
 
 \bigskip
-\textbf{(d) Correct proof that $x_i > 0$ for all $i \ge 1$.}
+\partlabel{d}
+Correct proof that $x_i > 0$ for all $i \ge 1$.
 
 Following the hint, we repair Erik's argument by folding positivity directly into the inductive hypothesis, so it no longer needs to be smuggled in mid-proof. Let
 \[
@@ -128,10 +141,12 @@ From $x_i > 2x_{i-1}$ we get $x_{i-1} < \tfrac{1}{2}x_i$. Multiplying both sides
 \[
 -8x_{i-1} > -8\cdot\tfrac{1}{2}x_i = -4x_i.
 \]
+
 Now use the recurrence $x_{i+1} = 6x_i - 8x_{i-1}$:
 \[
 x_{i+1} = 6x_i - 8x_{i-1} \ >\ 6x_i - 4x_i = 2x_i.
 \]
+
 So $x_{i+1} > 2x_i$, which is $P(i+1)$.
 
 By induction, $P(i)$ holds for all $i \ge 2$, i.e.\
@@ -160,14 +175,16 @@ State machine on triples $(r,s,a) \in \N^3$, start state $(x,y,0)$, transitions 
 \]
 
 \medskip
-\textbf{(a)} Tracing from $(5,22,0)$ (target: $5\cdot 22 = 110$):
+\partlabel{a}
+Tracing from $(5,22,0)$ (target: $5\cdot 22 = 110$):
 \[
 (5,22,0) \to (10,11,0) \to (20,5,10) \to (40,2,30) \to (80,1,30) \to (160,0,110).
 \]
 No transition applies once $s=0$, so this is the final state, with $a_f = 110 = 5 \cdot 22$. It correctly computes the product.
 
 \medskip
-\textbf{(b)} \textbf{Invariant.} Let $P(r,s,a) := $ ``$rs + a = xy$.'' We show $P$ is an invariant of the state machine: true at the start state, and preserved by every transition.
+\partlabel{b}
+\textbf{Invariant.} Let $P(r,s,a) := $ ``$rs + a = xy$.'' We show $P$ is an invariant of the state machine: true at the start state, and preserved by every transition.
 
 \begin{proof}
 \textbf{Holds initially:} $P(x,y,0)$ says $xy + 0 = xy$, which is true.
@@ -190,17 +207,20 @@ In both cases, the successor state also satisfies $P$. Since $P$ holds at the st
 \end{proof}
 
 \medskip
-\textbf{(c)} \textbf{Final states.} Transitions are defined exactly when $s > 0$, so a state has no outgoing transition (is final) precisely when $s = 0$. Thus the final states are exactly the triples of the form $(r, 0, a)$ for $r, a \in \N$.
+\partlabel{c}
+\textbf{Final states.} Transitions are defined exactly when $s > 0$, so a state has no outgoing transition (is final) precisely when $s = 0$. Thus the final states are exactly the triples of the form $(r, 0, a)$ for $r, a \in \N$.
 
 \medskip
-\textbf{(d)} \textbf{Partial correctness.} Let $(r_f, s_f, a_f)$ be any reachable final state. By part (c), $s_f = 0$. Since $P$ is an invariant (part (b)) and holds at the start state, it holds at every reachable state, including this one:
+\partlabel{d}
+\textbf{Partial correctness.} Let $(r_f, s_f, a_f)$ be any reachable final state. By part (c), $s_f = 0$. Since $P$ is an invariant (part (b)) and holds at the start state, it holds at every reachable state, including this one:
 \[
 P(r_f, 0, a_f):\qquad r_f \cdot 0 + a_f = xy \quad\Longrightarrow\quad a_f = xy.
 \]
 So in any reachable final state, $a_f = xy$, as required.
 
 \medskip
-\textbf{(e)} \textbf{Termination.} Let $\mathrm{bitcount}(n) := \lceil \log_2(n+1) \rceil$ for $n \in \N$. We show $\mathrm{bitcount}(s)$ strictly decreases — in fact, decreases by exactly $1$ — with every transition.
+\partlabel{e}
+\textbf{Termination.} Let $\mathrm{bitcount}(n) := \lceil \log_2(n+1) \rceil$ for $n \in \N$. We show $\mathrm{bitcount}(s)$ strictly decreases — in fact, decreases by exactly $1$ — with every transition.
 
 It is a standard fact that for $n \ge 1$, $\mathrm{bitcount}(n)$ is the unique integer $k$ such that $2^{k-1} \le n < 2^k$ (i.e.\ the number of bits in $n$'s binary representation), and $\mathrm{bitcount}(0) = 0$.
 
@@ -223,7 +243,8 @@ In both cases, the new value of $s$ has $\mathrm{bitcount}$ exactly one less tha
 \end{proof}
 
 \medskip
-\textbf{(f)} \textbf{Time bound.} By part (e), $\mathrm{bitcount}(s)$ decreases by exactly $1$ at every step, starting from $\mathrm{bitcount}(y)$ at the initial state $(x,y,0)$ and ending at $\mathrm{bitcount}(0) = 0$ at the final state. Hence, the number of transitions taken is exactly
+\partlabel{f}
+\textbf{Time bound.} By part (e), $\mathrm{bitcount}(s)$ decreases by exactly $1$ at every step, starting from $\mathrm{bitcount}(y)$ at the initial state $(x,y,0)$ and ending at $\mathrm{bitcount}(0) = 0$ at the final state. Hence, the number of transitions taken is exactly
 \[
 \mathrm{bitcount}(y) = \lceil \log_2(y+1) \rceil,
 \]

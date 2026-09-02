@@ -8,7 +8,7 @@
 
 \newtheorem*{theorem*}{Theorem}
 
-\title{MIT 6.1200J Problem Set 1 --- Solutions}
+\title{MIT 6.1200J Problem Set 1 – Solutions}
 \author{Nouman Rahman}
 \date{29th August 2026}
 
@@ -19,6 +19,9 @@
 \newcommand{\isPrime}{\mathrm{isPrime}}
 \newcommand{\isEven}{\mathrm{isEven}}
 \newcommand{\sixish}{\mathrm{sixish}}
+\newcommand{\partlabel}[1]{%
+    \noindent\makebox[2em][l]{\textbf{(#1)}}%
+}
 
 \begin{document}
 \maketitle
@@ -28,7 +31,8 @@
 \newpage
 \section*{Problem 2: Set Formulas and Propositional Formulas}
 
-\textbf{(a)} Verify that $(P \wedge \bar Q) \vee (P \wedge Q)$ is equivalent to $P$ using a truth table.
+\partlabel{a}
+Verify that $(P \wedge \bar Q) \vee (P \wedge Q)$ is equivalent to $P$ using a truth table.
 
 \begin{center}
 \begin{tabular}{cc|c|c|c|c|c}
@@ -44,7 +48,9 @@ F & F & T & F & F & F & F \\
 The column for $(P\wedge \bar Q)\vee(P\wedge Q)$ agrees with the column for $P$ in every row, so the two formulas are equivalent.
 
 \bigskip
-\textbf{(b)} Prove that $A = (A - B) \cup (A \cap B)$ for all sets $A, B$, by showing $x \in A$ iff $x \in (A-B)\cup(A\cap B)$ for all elements $x$.
+
+\partlabel{b}
+Prove that $A = (A - B) \cup (A \cap B)$ for all sets $A, B$, by showing $x \in A$ iff $x \in (A-B)\cup(A\cap B)$ for all elements $x$.
 
 \begin{proof}
 Let $x$ be arbitrary.
@@ -77,28 +83,34 @@ So the set identity $A = (A-B)\cup(A\cap B)$ is exactly the membership-level sta
 \newpage
 \section*{Problem 3: Predicate Practice}
 
-\textbf{(a)} The predicate $\sixish(n)$, ``$n$ is a natural number whose first digit is $6$'':
+\partlabel{a}
+The predicate $\sixish(n)$, ``$n$ is a natural number whose first digit is $6$'':
 \[
 \sixish(n) :=\ \exists k \in \N.\ \big(6\cdot 10^{k} \le n < 7 \cdot 10^{k}\big).
 \]
 
-\textbf{(b)} ``There are exactly two natural numbers $n$ such that $Q(n)$ is true'':
+\partlabel{b}
+``There are exactly two natural numbers $n$ such that $Q(n)$ is true'':
 \[
 \exists m, n \in \N.\ \Big( m \ne n \ \wedge\ \forall k \in \N.\big(Q(k) \leftrightarrow (k = m \vee k = n)\big) \Big).
 \]
 
-\textbf{(c)} Goldbach's Conjecture: ``every even integer greater than $2$ can be written as the sum of two primes.'' Following the required form $\forall n.\ W(n)$ with all the logic folded into $W$:
+\partlabel{c}
+Goldbach's Conjecture: ``every even integer greater than $2$ can be written as the sum of two primes.'' Following the required form $\forall n.\ W(n)$ with all the logic folded into $W$:
 \[
 \forall k \in \N.\ \Big[ \big(k > 2 \wedge \isEven(k)\big) \rightarrow \exists m, n \in \N.\big(\isPrime(m) \wedge \isPrime(n) \wedge k = m+n\big) \Big],
 \]
 where, since $\isEven$ was not predefined for us, we take $\isEven(k) := \neg \isOdd(k)$.
 
-\textbf{(d)} ``Every prime larger than $100$ is sixish'':
+
+\partlabel{d}
+``Every prime larger than $100$ is sixish'':
 \[
 \forall n \in \N.\ \Big[ \big(n > 100 \wedge \isPrime(n)\big) \rightarrow \sixish(n) \Big].
 \]
 
-\textbf{(e)} Is $R(n) := \exists b \in \N.\ (n = 2b+5)$ equivalent to $\isOdd(n)$?
+\partlabel{e}
+Is $R(n) := \exists b \in \N.\ (n = 2b+5)$ equivalent to $\isOdd(n)$?
 
 \emph{Claim: No, $R$ is \underline{not} equivalent to $\isOdd$.}
 
@@ -114,7 +126,8 @@ and solving $3 = 2b+5$ gives $b = -1 \notin \N$, so no such $b$ exists and $R(3)
 
 \section*{Problem 4: Induction and Contradiction}
 
-\textbf{(a)} \emph{Setup.} $Q(x)$ is a predicate on $\R$ such that for all $x, y \in \R$, if $Q(x \cdot y)$ is true then $Q(x)$ or $Q(y)$ is true. We show the stronger property: for every integer $n \ge 1$ and all $x_1, \dots, x_n \in \R$, if $Q(x_1 x_2 \cdots x_n)$ is true then at least one of $Q(x_1), \dots, Q(x_n)$ is true.
+\partlabel{a}
+\emph{Setup.} $Q(x)$ is a predicate on $\R$ such that for all $x, y \in \R$, if $Q(x \cdot y)$ is true then $Q(x)$ or $Q(y)$ is true. We show the stronger property: for every integer $n \ge 1$ and all $x_1, \dots, x_n \in \R$, if $Q(x_1 x_2 \cdots x_n)$ is true then at least one of $Q(x_1), \dots, Q(x_n)$ is true.
 
 \begin{proof}
 Let $P(n)$ be the statement: for all $x_1, \dots, x_n \in \R$,
@@ -155,7 +168,8 @@ By mathematical induction, $P(n)$ holds for all integers $n \ge 1$.
 \noindent\emph{Remark (fixing a gap).} The original argument substituted $y$ and $z$ back into $Q(y) \vee Q(z)$ and asserted the result followed ``by the inductive hypothesis,'' but never explicitly invoked $P(n)$ on $Q(y) = Q(x_1 \cdots x_n)$. The step above makes that invocation explicit: we need $P(n)$ to expand $Q(x_1\cdots x_n)$ into $Q(x_1) \vee \cdots \vee Q(x_n)$.
 
 \bigskip
-\textbf{(b)} \emph{Theorem 1.} If the product of $n \ge 1$ real numbers is irrational, then at least one of those numbers must be irrational.
+\partlabel{b}
+\emph{Theorem 1.} If the product of $n \ge 1$ real numbers is irrational, then at least one of those numbers must be irrational.
 
 To derive this from part (a), define
 \[
@@ -174,7 +188,8 @@ Equivalently (by contrapositive), we must prove the following lemma:
 Once the Lemma is established, part (a) (with this $Q$) gives exactly Theorem 1.
 
 \medskip
-\textbf{(c)} \emph{Proof of the Lemma, by contradiction.}
+\partlabel{c}
+\emph{Proof of the Lemma, by contradiction.}
 \begin{proof}
 Suppose, toward a contradiction, that $x$ and $y$ are both rational but $xy$ is irrational. Since $x$ and $y$ are rational, by definition there exist $p_1, q_1, p_2, q_2 \in \Z$ with $q_1 \ne 0$, $q_2 \ne 0$, such that
 \[
