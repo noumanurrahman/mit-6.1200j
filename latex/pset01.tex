@@ -1,0 +1,200 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{enumitem}
+\usepackage{mathtools}
+\usepackage{hyperref}
+\usepackage{pgffor}
+
+\newtheorem*{theorem*}{Theorem}
+
+\title{MIT 6.1200J Problem Set 1 --- Solutions}
+\author{Nouman Rahman}
+\date{29th August 2026}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\isOdd}{\mathrm{isOdd}}
+\newcommand{\isPrime}{\mathrm{isPrime}}
+\newcommand{\isEven}{\mathrm{isEven}}
+\newcommand{\sixish}{\mathrm{sixish}}
+
+\begin{document}
+\maketitle
+
+\section*{Problem 1: Collaboration Policy}
+
+\newpage
+\section*{Problem 2: Set Formulas and Propositional Formulas}
+
+\textbf{(a)} Verify that $(P \wedge \bar Q) \vee (P \wedge Q)$ is equivalent to $P$ using a truth table.
+
+\begin{center}
+\begin{tabular}{cc|c|c|c|c|c}
+$P$ & $Q$ & $\bar Q$ & $P \wedge \bar Q$ & $P \wedge Q$ & $(P\wedge\bar Q)\vee(P\wedge Q)$ & $P$ \\
+\hline
+T & T & F & F & T & T & T \\
+T & F & T & T & F & T & T \\
+F & T & F & F & F & F & F \\
+F & F & T & F & F & F & F \\
+\end{tabular}
+\end{center}
+
+The column for $(P\wedge \bar Q)\vee(P\wedge Q)$ agrees with the column for $P$ in every row, so the two formulas are equivalent.
+
+\bigskip
+\textbf{(b)} Prove that $A = (A - B) \cup (A \cap B)$ for all sets $A, B$, by showing $x \in A$ iff $x \in (A-B)\cup(A\cap B)$ for all elements $x$.
+
+\begin{proof}
+Let $x$ be arbitrary.
+
+($\Rightarrow$) Suppose $x \in A$. Either $x \in B$ or $x \notin B$.
+\begin{itemize}
+\item If $x \notin B$, then $x \in A$ and $x \notin B$, so $x \in A - B$, hence $x \in (A-B)\cup(A\cap B)$.
+\item If $x \in B$, then $x \in A$ and $x \in B$, so $x \in A \cap B$, hence $x \in (A-B)\cup(A\cap B)$.
+\end{itemize}
+Either way, $x \in (A-B)\cup(A\cap B)$.
+
+($\Leftarrow$) Suppose $x \in (A-B)\cup(A\cap B)$. Then $x \in A-B$ or $x \in A \cap B$.
+\begin{itemize}
+\item If $x \in A - B$, then by definition $x \in A$ (and $x \notin B$).
+\item If $x \in A \cap B$, then $x \in A$ (and $x \in B$).
+\end{itemize}
+Either way, $x \in A$.
+
+Since $x \in A$ iff $x \in (A-B)\cup(A\cap B)$ for arbitrary $x$, the two sets are equal: $A = (A-B)\cup(A\cap B)$.
+\end{proof}
+
+\emph{Relation to part (a).} This is the set-theoretic mirror of part (a). Substitute $P := $ ``$x \in A$'' and $Q := $ ``$x \in B$''. Then:
+\begin{itemize}
+\item $x \in A - B$ corresponds to $P \wedge \bar Q$ (in $A$, not in $B$),
+\item $x \in A \cap B$ corresponds to $P \wedge Q$ (in $A$, in $B$),
+\item $\cup$ corresponds to $\vee$.
+\end{itemize}
+So the set identity $A = (A-B)\cup(A\cap B)$ is exactly the membership-level statement $P \leftrightarrow \big((P\wedge \bar Q)\vee(P\wedge Q)\big)$ from part (a), and the case analysis in the proof above is just an unfolding of the truth table: the two cases $x\notin B$ / $x\in B$ are the two ways $Q$ can be false or true, matching the two rows of the truth table where $P$ is true.
+
+\newpage
+\section*{Problem 3: Predicate Practice}
+
+\textbf{(a)} The predicate $\sixish(n)$, ``$n$ is a natural number whose first digit is $6$'':
+\[
+\sixish(n) :=\ \exists k \in \N.\ \big(6\cdot 10^{k} \le n < 7 \cdot 10^{k}\big).
+\]
+
+\textbf{(b)} ``There are exactly two natural numbers $n$ such that $Q(n)$ is true'':
+\[
+\exists m, n \in \N.\ \Big( m \ne n \ \wedge\ \forall k \in \N.\big(Q(k) \leftrightarrow (k = m \vee k = n)\big) \Big).
+\]
+
+\textbf{(c)} Goldbach's Conjecture: ``every even integer greater than $2$ can be written as the sum of two primes.'' Following the required form $\forall n.\ W(n)$ with all the logic folded into $W$:
+\[
+\forall k \in \N.\ \Big[ \big(k > 2 \wedge \isEven(k)\big) \rightarrow \exists m, n \in \N.\big(\isPrime(m) \wedge \isPrime(n) \wedge k = m+n\big) \Big],
+\]
+where, since $\isEven$ was not predefined for us, we take $\isEven(k) := \neg \isOdd(k)$.
+
+\textbf{(d)} ``Every prime larger than $100$ is sixish'':
+\[
+\forall n \in \N.\ \Big[ \big(n > 100 \wedge \isPrime(n)\big) \rightarrow \sixish(n) \Big].
+\]
+
+\textbf{(e)} Is $R(n) := \exists b \in \N.\ (n = 2b+5)$ equivalent to $\isOdd(n)$?
+
+\emph{Claim: No, $R$ is \underline{not} equivalent to $\isOdd$.}
+
+\begin{proof}
+Suppose, toward a contradiction, that $R(n) \leftrightarrow \isOdd(n)$ for all $n \in \N$. Take $n = 3$. Since $3$ is odd, $\isOdd(3)$ is true, so by our assumption $R(3)$ must also be true. But
+\[
+R(3) := \exists b \in \N.\ (3 = 2b+5),
+\]
+and solving $3 = 2b+5$ gives $b = -1 \notin \N$, so no such $b$ exists and $R(3)$ is false. This contradicts $R(3)$ being true. Hence our assumption was wrong, and $R$ is not equivalent to $\isOdd$.
+
+(Intuitively, $R(n)$ only captures odd numbers $n \ge 5$, since $b$ ranges over $\N$; it misses the smaller odd numbers $1$ and $3$.)
+\end{proof}
+
+\section*{Problem 4: Induction and Contradiction}
+
+\textbf{(a)} \emph{Setup.} $Q(x)$ is a predicate on $\R$ such that for all $x, y \in \R$, if $Q(x \cdot y)$ is true then $Q(x)$ or $Q(y)$ is true. We show the stronger property: for every integer $n \ge 1$ and all $x_1, \dots, x_n \in \R$, if $Q(x_1 x_2 \cdots x_n)$ is true then at least one of $Q(x_1), \dots, Q(x_n)$ is true.
+
+\begin{proof}
+Let $P(n)$ be the statement: for all $x_1, \dots, x_n \in \R$,
+\[
+Q(x_1 x_2 \cdots x_n) \rightarrow Q(x_1) \vee Q(x_2) \vee \cdots \vee Q(x_n).
+\]
+We prove $P(n)$ holds for all integers $n \ge 1$ by induction on $n$.
+
+\textbf{Base case ($n=1$):} $P(1)$ says: for all $x_1 \in \R$, $Q(x_1) \rightarrow Q(x_1)$, which is trivially true.
+
+\textbf{Inductive step:} Suppose $n \ge 1$ and $P(n)$ holds; we show $P(n+1)$ holds. Let $x_1, \dots, x_n, x_{n+1} \in \R$ be arbitrary, and suppose $Q(x_1 x_2 \cdots x_n x_{n+1})$ is true. Write
+\[
+y := x_1 x_2 \cdots x_n, \qquad z := x_{n+1},
+\]
+so that $x_1 \cdots x_n x_{n+1} = yz$. By hypothesis, $Q(yz)$ is true. Applying the given property of $Q$ (i.e., $P(1)$ is not what we need here --- we use the defining property of $Q$ directly, which is exactly $P(2)$ applied to $y,z$) to $y$ and $z$:
+\[
+Q(yz) \rightarrow Q(y) \vee Q(z).
+\]
+Since $Q(yz)$ holds, we conclude $Q(y) \vee Q(z)$ holds, i.e.,
+\[
+Q(x_1 x_2 \cdots x_n) \ \vee\ Q(x_{n+1}).
+\]
+Now consider the two cases:
+\begin{itemize}
+\item If $Q(x_{n+1})$ holds, then in particular $Q(x_1) \vee \cdots \vee Q(x_n) \vee Q(x_{n+1})$ holds.
+\item If $Q(x_1 x_2 \cdots x_n)$ holds, then by the inductive hypothesis $P(n)$ applied to $x_1,\dots,x_n$, we get
+\[
+Q(x_1 x_2 \cdots x_n) \rightarrow Q(x_1) \vee \cdots \vee Q(x_n),
+\]
+so $Q(x_1) \vee \cdots \vee Q(x_n)$ holds, and hence so does $Q(x_1) \vee \cdots \vee Q(x_n) \vee Q(x_{n+1})$.
+\end{itemize}
+In either case, $Q(x_1) \vee \cdots \vee Q(x_n) \vee Q(x_{n+1})$ holds, which is exactly $P(n+1)$.
+
+By mathematical induction, $P(n)$ holds for all integers $n \ge 1$.
+\end{proof}
+
+\medskip
+\noindent\emph{Remark (fixing a gap).} The original argument substituted $y$ and $z$ back into $Q(y) \vee Q(z)$ and asserted the result followed ``by the inductive hypothesis,'' but never explicitly invoked $P(n)$ on $Q(y) = Q(x_1 \cdots x_n)$. The step above makes that invocation explicit: we need $P(n)$ to expand $Q(x_1\cdots x_n)$ into $Q(x_1) \vee \cdots \vee Q(x_n)$.
+
+\bigskip
+\textbf{(b)} \emph{Theorem 1.} If the product of $n \ge 1$ real numbers is irrational, then at least one of those numbers must be irrational.
+
+To derive this from part (a), define
+\[
+Q(x) := \text{``$x$ is irrational.''}
+\]
+Before part (a) applies to this $Q$, we must check $Q$ satisfies the hypothesis of part (a), namely the base property
+\[
+\forall x, y \in \R.\ \big( Q(xy) \rightarrow Q(x) \vee Q(y) \big).
+\]
+Equivalently (by contrapositive), we must prove the following lemma:
+
+\begin{quote}
+\textbf{Lemma.} For all $x, y \in \R$, if $x$ and $y$ are both rational, then $xy$ is rational.
+\end{quote}
+
+Once the Lemma is established, part (a) (with this $Q$) gives exactly Theorem 1.
+
+\medskip
+\textbf{(c)} \emph{Proof of the Lemma, by contradiction.}
+\begin{proof}
+Suppose, toward a contradiction, that $x$ and $y$ are both rational but $xy$ is irrational. Since $x$ and $y$ are rational, by definition there exist $p_1, q_1, p_2, q_2 \in \Z$ with $q_1 \ne 0$, $q_2 \ne 0$, such that
+\[
+x = \frac{p_1}{q_1}, \qquad y = \frac{p_2}{q_2}.
+\]
+Then
+\[
+xy = \frac{p_1}{q_1}\cdot\frac{p_2}{q_2} = \frac{p_1 p_2}{q_1 q_2}.
+\]
+Since $p_1, p_2, q_1, q_2 \in \Z$, we have $p_1 p_2 \in \Z$ and $q_1 q_2 \in \Z$; moreover $q_1 q_2 \ne 0$ since $q_1 \ne 0$ and $q_2 \ne 0$. Hence $xy$ is expressible as a ratio of two integers with nonzero denominator, i.e.\ $xy$ is rational. This contradicts our assumption that $xy$ is irrational. Therefore, no such $x, y$ exist: whenever $x$ and $y$ are both rational, $xy$ is rational.
+\end{proof}
+
+\emph{Finishing the proof of Theorem 1.} The Lemma is precisely the contrapositive of the required property of $Q(x) := $ ``$x$ is irrational,'' namely
+\[
+\forall x,y \in \R.\ Q(xy) \rightarrow Q(x) \vee Q(y).
+\]
+(Indeed: if $xy$ is irrational, then $x,y$ cannot both be rational, by the Lemma; so at least one of $x, y$ is irrational.) Since $Q$ satisfies the hypothesis of part (a), part (a) tells us that for every integer $n \ge 1$ and all $x_1, \dots, x_n \in \R$,
+\[
+Q(x_1 x_2 \cdots x_n) \rightarrow Q(x_1) \vee \cdots \vee Q(x_n),
+\]
+i.e., if $x_1 x_2 \cdots x_n$ is irrational, then at least one of $x_1, \dots, x_n$ is irrational. This is exactly Theorem 1. $\blacksquare$
+
+\end{document}
