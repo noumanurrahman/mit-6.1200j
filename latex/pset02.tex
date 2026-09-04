@@ -10,7 +10,7 @@
 
 \title{MIT 6.1200J Problem Set 2 – Solutions}
 \author{Nouman Rahman}
-\date{1st September 2026}
+\date{4th September 2026}
 
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\R}{\mathbb{R}}
@@ -252,5 +252,32 @@ so from any starting state $(x,y,0)$, the algorithm terminates after at most $\l
 
 \newpage
 \section*{Problem 4: Invariant Enlightenment}
+
+Theorem. \textit{If fewer than $n$ students among those in an $n \times n$ arrangement are initially enlightened, and additional students reach enlightenment only by being taught by two or more neighbors, then there will be at least 1 student who never reaches enlightenment.}
+\begin{proof}
+Think of each of the $n^2$ desks as a unit square, so the whole classroom is an $n \times n$ grid of squares, and ``adjacent'' desks are squares that share a side.
+ 
+For any set $S$ of enlightened desks, let $L(S)$ be the number of exposed unit-edges of $S$ --- that is, count every side of every enlightened square, except don't count a side if it's shared with another enlightened square (that side is ``inside'' the enlightened region, not exposed). This includes sides facing a non-enlightened desk \emph{and} sides sitting on the outer edge of the whole grid.
+ 
+First, notice $L(S) \le 4|S|$ for any set $S$: each desk contributes at most $4$ sides to $L(S)$, and it can only go down from there whenever two enlightened desks sit next to each other, since they share a side that's no longer exposed.
+ 
+Now suppose a new desk $c$ gets enlightened because it has $k \ge 2$ already-enlightened neighbors. Before $c$ joins, those $k$ shared sides were exposed (an enlightened desk on one side, $c$ --- not yet enlightened --- on the other), so they counted towards $L$. Once $c$ joins, those $k$ sides become interior, so we lose $k$ from the perimeter. Meanwhile, $c$'s other $4-k$ sides are now newly exposed, so we gain $4-k$. Net change:
+\[
+(4-k) - k = 4 - 2k \le 0 \qquad \text{since } k \ge 2.
+\]
+So every time a new student gets enlightened, $L$ either goes down or stays the same – it never goes up.
+ 
+If literally every desk ends up enlightened, then $S$ is the whole grid, and the only exposed edges left are the outer boundary of the big $n \times n$ square, which has length $4n$. So in that case $L(S) = 4n$ exactly.
+ 
+Now put it together. Say we start with $E_0 < n$ students enlightened. Then
+\[
+L(S_0) \le 4E_0 < 4n.
+\]
+Since $L$ never increases as more students get enlightened, $L$ stays below $4n$ forever, no matter how far the enlightenment spreads. But if every student eventually became enlightened, $L$ would have to equal exactly $4n$ at that point --- which is impossible, since $L$ never gets there.
+ 
+So it's impossible for every student to become enlightened.
+
+Hence, at least one student is not enlightened.
+\end{proof}
 
 \end{document}
